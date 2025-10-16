@@ -4,8 +4,15 @@ import com.fastcampus.fc_board.exception.PostNotDeletableException
 import com.fastcampus.fc_board.exception.PostNotFoundException
 import com.fastcampus.fc_board.repository.PostRepository
 import com.fastcampus.fc_board.service.dto.PostCreateRequestDto
+import com.fastcampus.fc_board.service.dto.PostDetailResponseDto
+import com.fastcampus.fc_board.service.dto.PostSearchRequestDto
+import com.fastcampus.fc_board.service.dto.PostSummaryResponseDto
 import com.fastcampus.fc_board.service.dto.PostUpdateRequestDto
+import com.fastcampus.fc_board.service.dto.toDetailResponseDto
 import com.fastcampus.fc_board.service.dto.toEntity
+import com.fastcampus.fc_board.service.dto.toSummaryResponseDto
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -15,6 +22,14 @@ import org.springframework.transaction.annotation.Transactional
 class PostService(
     private val postRepository: PostRepository,
 ) {
+    fun getPost(id: Long): PostDetailResponseDto {
+        return postRepository.findByIdOrNull(id)?.toDetailResponseDto() ?: throw PostNotFoundException()
+    }
+
+    fun findPageBy(pageRequest: Pageable, postSearchRequestDto: PostSearchRequestDto): Page<PostSummaryResponseDto> {
+        return postRepository.findPageBy(pageRequest, postSearchRequestDto).toSummaryResponseDto()
+    }
+
     @Transactional
     fun createPost(requestDto: PostCreateRequestDto): Long {
         return postRepository.save(requestDto.toEntity()).id

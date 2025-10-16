@@ -1,23 +1,11 @@
 package com.fastcampus.fc_board.controller
 
-import com.fastcampus.fc_board.controller.dto.PostCreateRequest
-import com.fastcampus.fc_board.controller.dto.PostDetailResponse
-import com.fastcampus.fc_board.controller.dto.PostSearchRequest
-import com.fastcampus.fc_board.controller.dto.PostSummaryResponse
-import com.fastcampus.fc_board.controller.dto.PostUpdateRequest
-import com.fastcampus.fc_board.controller.dto.toDto
+import com.fastcampus.fc_board.controller.dto.*
 import com.fastcampus.fc_board.service.PostService
+import com.fastcampus.fc_board.service.dto.toDto
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
-import java.time.LocalDateTime
+import org.springframework.web.bind.annotation.*
 
 @RestController
 class PostController(
@@ -52,13 +40,13 @@ class PostController(
         pageable: Pageable,
         postSearchRequest: PostSearchRequest,
     ): Page<PostSummaryResponse> {
-        return Page.empty()
+        return postService.findPageBy(pageable, postSearchRequest.toDto()).toResponse()
     }
 
     @GetMapping("/posts/{id}")
     fun getPost(
         @PathVariable id: Long,
     ): PostDetailResponse {
-        return PostDetailResponse(id, "title", "content", "createdBy", "updatedBy", LocalDateTime.now().toString())
+        return postService.getPost(id).toResponse()
     }
 }
