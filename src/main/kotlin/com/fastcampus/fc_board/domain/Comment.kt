@@ -1,5 +1,7 @@
 package com.fastcampus.fc_board.domain
 
+import com.fastcampus.fc_board.exception.CommentNotUpdatableException
+import com.fastcampus.fc_board.service.dto.CommentUpdateRequestDto
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
@@ -23,4 +25,12 @@ class Comment(
     @ManyToOne(fetch = FetchType.LAZY)
     var post: Post = post
         protected set
+
+    fun update(commentUpdateRequestDto: CommentUpdateRequestDto) {
+        if (commentUpdateRequestDto.updatedBy != this.createdBy) {
+            throw CommentNotUpdatableException()
+        }
+        this.content = commentUpdateRequestDto.content
+        super.updatedBy(commentUpdateRequestDto.updatedBy)
+    }
 }

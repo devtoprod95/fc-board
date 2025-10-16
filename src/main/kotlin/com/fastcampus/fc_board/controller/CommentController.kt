@@ -2,6 +2,8 @@ package com.fastcampus.fc_board.controller
 
 import com.fastcampus.fc_board.controller.dto.CommentCreateRequest
 import com.fastcampus.fc_board.controller.dto.CommentUpdateRequest
+import com.fastcampus.fc_board.controller.dto.toDto
+import com.fastcampus.fc_board.service.CommentService
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -11,17 +13,16 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class CommentController {
+class CommentController(
+    private val commentService: CommentService,
+) {
 
     @PostMapping("posts/{postId}/comments")
     fun createComment(
         @PathVariable postId: Long,
         @RequestBody commentCreateRequest: CommentCreateRequest,
     ): Long {
-        println("postId: $postId")
-        println("content: ${commentCreateRequest.content}")
-        println("createdBy: ${commentCreateRequest.createdBy}")
-        return postId
+        return commentService.createComment(postId, commentCreateRequest.toDto())
     }
 
     @PutMapping("comments/{commentId}")
@@ -29,10 +30,7 @@ class CommentController {
         @PathVariable commentId: Long,
         @RequestBody commentUpdateRequest: CommentUpdateRequest,
     ): Long {
-        println("commentId: $commentId")
-        println("content: ${commentUpdateRequest.content}")
-        println("updatedBy: ${commentUpdateRequest.updatedBy}")
-        return commentId
+        return commentService.updateComment(commentId, commentUpdateRequest.toDto())
     }
 
     @DeleteMapping("comments/{commentId}")
@@ -40,8 +38,6 @@ class CommentController {
         @PathVariable commentId: Long,
         @RequestParam deletedBy: String,
     ): Long {
-        println("commentId: $commentId")
-        println("deletedBy: $deletedBy")
-        return commentId
+        return commentService.deleteComment(commentId, deletedBy)
     }
 }
