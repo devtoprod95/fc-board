@@ -9,11 +9,11 @@ import jakarta.persistence.Id
 class Post(
     createdBy: String,
     title: String,
-    content: String
-): BaseEntity(createdBy) {
+    content: String,
+) : BaseEntity(createdBy) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0;
+    val id: Long = 0
 
     var title: String = title
         protected set

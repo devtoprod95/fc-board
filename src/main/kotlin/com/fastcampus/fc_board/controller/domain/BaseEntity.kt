@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 
 @MappedSuperclass
 abstract class BaseEntity(
-    createdBy: String
+    createdBy: String,
 ) {
     val createdBy: String = createdBy
     val createdAt: LocalDateTime = LocalDateTime.now()

@@ -21,40 +21,40 @@ class PostController {
 
     @PostMapping("/posts")
     fun createPost(
-        @RequestBody postCreateRequest: PostCreateRequest
+        @RequestBody postCreateRequest: PostCreateRequest,
     ): Long {
-        return 1L;
+        return 1L
     }
 
     @PutMapping("/posts/{id}")
     fun updatePost(
         @PathVariable id: Long,
-        @RequestBody postUpdateRequest: PostUpdateRequest
+        @RequestBody postUpdateRequest: PostUpdateRequest,
     ): Long {
-        return id;
+        return id
     }
 
     @DeleteMapping("/posts/{id}")
     fun deletePost(
         @PathVariable id: Long,
-        @RequestBody createdBy: String
+        @RequestBody createdBy: String,
     ): Long {
-        println(createdBy);
-        return id;
+        println(createdBy)
+        return id
     }
 
     @GetMapping("/posts")
     fun getPosts(
         pageable: Pageable,
-        postSearchRequest: PostSearchRequest
+        postSearchRequest: PostSearchRequest,
     ): Page<PostSummaryResponse> {
-        return Page.empty();
+        return Page.empty()
     }
 
     @GetMapping("/posts/{id}")
     fun getPost(
         @PathVariable id: Long,
     ): PostDetailResponse {
-        return PostDetailResponse(id, "title", "content", "createdBy", "updatedBy", LocalDateTime.now().toString());
+        return PostDetailResponse(id, "title", "content", "createdBy", "updatedBy", LocalDateTime.now().toString())
     }
 }
