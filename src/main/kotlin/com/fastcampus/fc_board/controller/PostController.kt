@@ -2,7 +2,6 @@ package com.fastcampus.fc_board.controller
 
 import com.fastcampus.fc_board.controller.dto.*
 import com.fastcampus.fc_board.service.PostService
-import com.fastcampus.fc_board.service.dto.toDto
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.web.bind.annotation.*

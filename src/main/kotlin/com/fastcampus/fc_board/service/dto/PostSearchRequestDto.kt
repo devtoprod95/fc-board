@@ -6,8 +6,3 @@ data class PostSearchRequestDto(
     val title: String? = null,
     val createdBy: String? = null,
 )
-
-fun PostSearchRequest.toDto() = PostSearchRequestDto(
-    title = title,
-    createdBy = createdBy
-)
