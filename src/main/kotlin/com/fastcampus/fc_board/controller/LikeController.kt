@@ -1,18 +1,21 @@
 package com.fastcampus.fc_board.controller
 
+import com.fastcampus.fc_board.service.LikeService
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class LikeController() {
+class LikeController(
+    private val likeService: LikeService,
+) {
 
     @PostMapping("/posts/{postId}/likes")
     fun createLike(
         @PathVariable postId: Long,
         @RequestParam createdBy: String,
     ): Long {
-        return 1L
+        return likeService.createLike(postId, createdBy)
     }
 }
