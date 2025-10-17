@@ -182,7 +182,9 @@ class PostServiceTest(
         }
     }
     given("게시글 상세조회시") {
-        val saved = postRepository.save(Post(title = "title", content = "content", createdBy = "harris", tags = listOf("tag1", "tag2", "tag3")))
+        val saved = postRepository.save(
+            Post(title = "title", content = "content", createdBy = "harris", tags = listOf("tag1", "tag2", "tag3"))
+        )
         When("정상 조회시") {
             val post = postService.getPost(saved.id)
             then("게시글의 내용이 정상적으로 반환됨을 확인한다.") {
@@ -192,7 +194,7 @@ class PostServiceTest(
                 post.content shouldBe "content"
                 post.createdBy shouldBe "harris"
             }
-            then("태그가 정상적으로 조회됨을 확인한다."){
+            then("태그가 정상적으로 조회됨을 확인한다.") {
                 post.tags.size shouldBe 3
                 post.tags[0] shouldBe "tag1"
                 post.tags[1] shouldBe "tag2"
@@ -252,7 +254,7 @@ class PostServiceTest(
                 postPage.content[0].title shouldContain "title1"
                 postPage.content[0].createdBy shouldBe "harris1"
             }
-            then(" 첫번째 태그가 함께 조회됨을 확인한다."){
+            then(" 첫번째 태그가 함께 조회됨을 확인한다.") {
                 postPage.content.forEach {
                     it.tags.size shouldBe 2
                     it.tags[0] shouldBe "tag1"
