@@ -1,9 +1,11 @@
 package com.fastcampus.fc_board.service
 
+import com.fastcampus.fc_board.domain.Comment
 import com.fastcampus.fc_board.domain.Post
 import com.fastcampus.fc_board.exception.PostNotDeletableException
 import com.fastcampus.fc_board.exception.PostNotFoundException
 import com.fastcampus.fc_board.exception.PostNotUpdatableException
+import com.fastcampus.fc_board.repository.CommentRepository
 import com.fastcampus.fc_board.repository.PostRepository
 import com.fastcampus.fc_board.service.dto.PostCreateRequestDto
 import com.fastcampus.fc_board.service.dto.PostSearchRequestDto
@@ -22,6 +24,7 @@ import org.springframework.data.repository.findByIdOrNull
 class PostServiceTest(
     private val postService: PostService,
     private val postRepository: PostRepository,
+    private val commentRepository: CommentRepository,
 ) : BehaviorSpec({
     beforeSpec {
         postRepository.saveAll(
@@ -143,6 +146,21 @@ class PostServiceTest(
                 }
             }
         }
+        When("댓글 추가시") {
+            commentRepository.save(Comment(content = "댓글 내용1", post = saved, createdBy = "댓글 작성자"))
+            commentRepository.save(Comment(content = "댓글 내용2", post = saved, createdBy = "댓글 작성자"))
+            commentRepository.save(Comment(content = "댓글 내용3", post = saved, createdBy = "댓글 작성자"))
+            val post = postService.getPost(saved.id)
+            then("댓글이 함께 조회됨을 확인한다.") {
+                post.comments.size shouldBe 3
+                post.comments[0].content shouldBe "댓글 내용1"
+                post.comments[1].content shouldBe "댓글 내용2"
+                post.comments[2].content shouldBe "댓글 내용3"
+                post.comments[0].createdBy shouldBe "댓글 작성자"
+                post.comments[1].createdBy shouldBe "댓글 작성자"
+                post.comments[2].createdBy shouldBe "댓글 작성자"
+            }
+        }
     }
     given("게시글 목록 조회시") {
         When("정상 조회시") {
@@ -173,6 +191,10 @@ class PostServiceTest(
                 postPage.content.size shouldBe 5
                 postPage.content[0].title shouldContain "title1"
                 postPage.content[0].createdBy shouldBe "harris1"
+            }
+        }
+        When("댓글 추가시") {
+            then("댓글이 함께 조회됨을 확인한다.") {
             }
         }
     }

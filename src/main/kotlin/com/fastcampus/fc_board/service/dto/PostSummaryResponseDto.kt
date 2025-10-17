@@ -9,6 +9,7 @@ data class PostSummaryResponseDto(
     val title: String,
     val createdBy: String,
     val createdAt: String,
+    val comments: List<CommentResponseDto>,
 )
 
 fun Page<Post>.toSummaryResponseDto() = PageImpl(
@@ -21,5 +22,6 @@ fun Post.toSummaryResponseDto() = PostSummaryResponseDto(
     id = id,
     title = title,
     createdBy = createdBy,
-    createdAt = createdAt.toString()
+    createdAt = createdAt.toString(),
+    comments = comments.map { it.toResponseDto() }
 )
