@@ -10,6 +10,7 @@ data class PostSummaryResponse(
     val createdBy: String,
     val createdAt: String,
     val comments: List<CommentResponse>,
+    val tag: String? = null,
 )
 
 fun Page<PostSummaryResponseDto>.toResponse() = PageImpl(
