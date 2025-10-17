@@ -31,16 +31,16 @@ class PostServiceTest(
     beforeSpec {
         postRepository.saveAll(
             listOf(
-                Post(title = "title1", content = "content1", createdBy = "harris1"),
-                Post(title = "title12", content = "content1", createdBy = "harris1"),
-                Post(title = "title13", content = "content1", createdBy = "harris1"),
-                Post(title = "title14", content = "content1", createdBy = "harris1"),
-                Post(title = "title15", content = "content1", createdBy = "harris1"),
-                Post(title = "title6", content = "content1", createdBy = "harris2"),
-                Post(title = "title7", content = "content1", createdBy = "harris2"),
-                Post(title = "title8", content = "content1", createdBy = "harris2"),
-                Post(title = "title9", content = "content1", createdBy = "harris2"),
-                Post(title = "title10", content = "content1", createdBy = "harris2")
+                Post(title = "title1", content = "content1", createdBy = "harris1", tags = listOf("tag1", "tag2")),
+                Post(title = "title12", content = "content1", createdBy = "harris1", tags = listOf("tag1", "tag2")),
+                Post(title = "title13", content = "content1", createdBy = "harris1", tags = listOf("tag1", "tag2")),
+                Post(title = "title14", content = "content1", createdBy = "harris1", tags = listOf("tag1", "tag2")),
+                Post(title = "title15", content = "content1", createdBy = "harris1", tags = listOf("tag1", "tag2")),
+                Post(title = "title6", content = "content1", createdBy = "harris2", tags = listOf("tag1", "tag5")),
+                Post(title = "title7", content = "content1", createdBy = "harris2", tags = listOf("tag1", "tag5")),
+                Post(title = "title8", content = "content1", createdBy = "harris2", tags = listOf("tag1", "tag5")),
+                Post(title = "title9", content = "content1", createdBy = "harris2", tags = listOf("tag1", "tag5")),
+                Post(title = "title10", content = "content1", createdBy = "harris2", tags = listOf("tag1", "tag5"))
             )
         )
     }
@@ -182,7 +182,7 @@ class PostServiceTest(
         }
     }
     given("게시글 상세조회시") {
-        val saved = postRepository.save(Post(title = "title", content = "content", createdBy = "harris"))
+        val saved = postRepository.save(Post(title = "title", content = "content", createdBy = "harris", tags = listOf("tag1", "tag2", "tag3")))
         When("정상 조회시") {
             val post = postService.getPost(saved.id)
             then("게시글의 내용이 정상적으로 반환됨을 확인한다.") {
@@ -191,6 +191,12 @@ class PostServiceTest(
                 post.title shouldBe "title"
                 post.content shouldBe "content"
                 post.createdBy shouldBe "harris"
+            }
+            then("태그가 정상적으로 조회됨을 확인한다."){
+                post.tags.size shouldBe 3
+                post.tags[0] shouldBe "tag1"
+                post.tags[1] shouldBe "tag2"
+                post.tags[2] shouldBe "tag3"
             }
         }
         When("게시글이 없을 때") {
@@ -246,9 +252,24 @@ class PostServiceTest(
                 postPage.content[0].title shouldContain "title1"
                 postPage.content[0].createdBy shouldBe "harris1"
             }
+            then(" 첫번째 태그가 함께 조회됨을 확인한다."){
+                postPage.content.forEach {
+                    it.tags.size shouldBe 2
+                    it.tags[0] shouldBe "tag1"
+                }
+            }
         }
-        When("댓글 추가시") {
-            then("댓글이 함께 조회됨을 확인한다.") {
+        When("태그로 검색") {
+            val postPage = postService.findPageBy(PageRequest.of(0, 5), PostSearchRequestDto(tag = "tag5"))
+            then("태그에 해당하는 게시글이 반환된다.") {
+                postPage.number shouldBe 0
+                postPage.size shouldBe 5
+                postPage.content.size shouldBe 5
+                postPage.content[0].title shouldContain "title10"
+                postPage.content[1].title shouldContain "title9"
+                postPage.content[2].title shouldContain "title8"
+                postPage.content[3].title shouldContain "title7"
+                postPage.content[4].title shouldContain "title6"
             }
         }
     }
