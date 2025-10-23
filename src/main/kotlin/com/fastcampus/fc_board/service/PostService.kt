@@ -3,6 +3,7 @@ package com.fastcampus.fc_board.service
 import com.fastcampus.fc_board.exception.PostNotDeletableException
 import com.fastcampus.fc_board.exception.PostNotFoundException
 import com.fastcampus.fc_board.repository.PostRepository
+import com.fastcampus.fc_board.repository.TagRepository
 import com.fastcampus.fc_board.service.dto.PostCreateRequestDto
 import com.fastcampus.fc_board.service.dto.PostDetailResponseDto
 import com.fastcampus.fc_board.service.dto.PostSearchRequestDto
@@ -22,12 +23,16 @@ import org.springframework.transaction.annotation.Transactional
 class PostService(
     private val postRepository: PostRepository,
     private val likeService: LikeService,
+    private val tagRepository: TagRepository,
 ) {
     fun getPost(id: Long): PostDetailResponseDto {
         return postRepository.findByIdOrNull(id)?.toDetailResponseDto(likeService::countLike) ?: throw PostNotFoundException()
     }
 
     fun findPageBy(pageRequest: Pageable, postSearchRequestDto: PostSearchRequestDto): Page<PostSummaryResponseDto> {
+        postSearchRequestDto.tag?.let {
+            return tagRepository.findPageBy(pageRequest, it).toSummaryResponseDto(likeService::countLike)
+        }
         return postRepository.findPageBy(pageRequest, postSearchRequestDto).toSummaryResponseDto(likeService::countLike)
     }
 
