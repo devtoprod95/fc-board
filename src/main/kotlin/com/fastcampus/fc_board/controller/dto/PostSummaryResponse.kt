@@ -28,5 +28,6 @@ fun PostSummaryResponseDto.toResponse() = PostSummaryResponse(
     createdAt = createdAt,
     comments = comments.map { it.toResponse() },
     tags = tags,
-    firstTag = firstTag
+    firstTag = firstTag,
+    likeCount = likeCount
 )
