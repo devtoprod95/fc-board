@@ -1,7 +1,7 @@
 package com.fastcampus.fc_board.repository
 
-import com.fastcampus.fc_board.domain.QTag.tag
 import com.fastcampus.fc_board.domain.QPost.post
+import com.fastcampus.fc_board.domain.QTag.tag
 import com.fastcampus.fc_board.domain.Tag
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
