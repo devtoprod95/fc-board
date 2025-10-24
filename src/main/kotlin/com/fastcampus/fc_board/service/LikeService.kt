@@ -20,6 +20,7 @@ class LikeService(
     @Transactional
     fun createLike(postId: Long, createdBy: String): Long {
         val post = postRepository.findByIdOrNull(postId) ?: throw PostNotFoundException()
+
         redisUtil.increment(redisUtil.getLikeCountKey(postId))
         return likeRepository.save(Like(post = post, createdBy = createdBy)).id
     }
