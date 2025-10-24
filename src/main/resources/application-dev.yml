@@ -15,5 +15,5 @@ spring:
     cache:
         type: redis
         redis:
-            host: fc-board-redis2-0001-001.fc-board-redis2.ffsico.apn2.cache.amazonaws.com
+            host: fc-board-redis-0001-001.fc-board-redis.ffsico.apn2.cache.amazonaws.com
             port: 6379
