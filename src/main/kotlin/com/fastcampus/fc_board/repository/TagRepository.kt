@@ -1,6 +1,7 @@
 package com.fastcampus.fc_board.repository
 
 import com.fastcampus.fc_board.domain.QTag.tag
+import com.fastcampus.fc_board.domain.QPost.post
 import com.fastcampus.fc_board.domain.Tag
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
@@ -19,7 +20,7 @@ interface CustomTagRepository {
 class CustomTagRepositoryImpl : CustomTagRepository, QuerydslRepositorySupport(Tag::class.java) {
     override fun findPageBy(pageRequest: Pageable, tagName: String): Page<Tag> {
         return from(tag)
-            .join(tag.post).fetchJoin()
+            .join(tag.post, post).fetchJoin()
             .where(tag.name.eq(tagName))
             .orderBy(tag.post.createdAt.desc())
             .offset(pageRequest.offset)
